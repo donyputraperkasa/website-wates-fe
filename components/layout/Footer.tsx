@@ -1,4 +1,5 @@
 import { MapPin, Phone, Mail, MessageCircle, Instagram, Youtube } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
     return (
@@ -9,39 +10,46 @@ export default function Footer() {
 
             <div className="flex flex-wrap gap-6 text-sm text-gray-600 items-center">
 
-            <div className="flex items-center gap-2">
-                <MapPin size={18} />
-                <span>Jalan Sugiman 1 Wates </span>
-            </div>
+                <div className="flex items-center gap-2">
+                    <MapPin size={18} />
+                    <span>Jalan Sugiman 1 Wates </span>
+                </div>
 
-            <div className="flex items-center gap-2">
-                <Phone size={18} />
-                <span>0123456789</span>
-            </div>
+                <div className="flex items-center gap-2">
+                    <Phone size={18} />
+                    <span>0123456789</span>
+                </div>
 
-            <div className="flex items-center gap-2">
-                <Mail size={18} />
-                <span>smpbopkrisatuwates@mail.com</span>
-            </div>
+                <div className="flex items-center gap-2">
+                    <Mail size={18} />
+                    <span>smpbopkrisatuwates@mail.com</span>
+                </div>
 
             </div>
 
             <div className="flex flex-wrap gap-6 text-sm text-gray-600 items-center">
 
-            <div className="flex items-center gap-2">
-                <MessageCircle size={18} />
-                <span>0123456789</span>
-            </div>
+                <div className="flex items-center gap-2">
+                    <MessageCircle size={18} />
+                    <span>0123456789</span>
+                </div>
 
-            <div className="flex items-center gap-2">
-                <Instagram size={18} />
-                <span>smp bopkri 1 wates</span>
-            </div>
+                <div className="flex items-center gap-2">
+                    <Instagram size={18} />
+                    <span>smp bopkri 1 wates</span>
+                </div>
 
-            <div className="flex items-center gap-2">
-                <Youtube size={18} />
-                <span>Sekolah Riset Wates</span>
-            </div>
+                <div className="flex items-center gap-2">
+                    <Youtube size={18} />
+                    <span>Sekolah Riset Wates</span>
+                </div>
+
+                <Link
+                    href="/admin-login"
+                    className="px-3 py-1.5 text-sm font-medium"
+                >
+                    Login Admin
+                </Link>
 
             </div>
 

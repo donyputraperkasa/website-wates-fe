@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import EditArticleHeader from "@/components/admin/articles/form/EditArticleHeader";
-import ImageUploadSection from "@/components/admin/articles/form/ImageUploadSection";
+import ImageUploadSection from "@/components/admin/ImageUploadSection";
 import ArticleFormActions from "@/components/admin/articles/form/ArticleFormActions";
 
 export default function EditArticlePage() {
@@ -110,10 +110,11 @@ export default function EditArticlePage() {
             </div>
 
             <ImageUploadSection
-            preview={preview}
-            currentImage={currentImage}
-            setImage={setImage}
-            setPreview={setPreview}
+                label="Article Image"
+                preview={preview}
+                currentImage={currentImage}
+                setImage={setImage}
+                setPreview={setPreview}
             />
 
             <ArticleFormActions loading={loading} />

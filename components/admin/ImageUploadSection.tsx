@@ -1,6 +1,7 @@
 "use client";
 
 interface Props {
+    label: string;
     preview: string | null;
     currentImage: string | null;
     setImage: (file: File | null) => void;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export default function ImageUploadSection({
+    label,
     preview,
     currentImage,
     setImage,
@@ -17,7 +19,7 @@ export default function ImageUploadSection({
         <div className="space-y-3 border border-dashed border-gray-300 rounded-xl p-4 bg-gray-50">
 
         <label className="text-sm font-semibold text-gray-700">
-            Article Image
+            {label}
         </label>
 
         <input

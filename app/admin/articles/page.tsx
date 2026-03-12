@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import ArticlesTable from "@/components/admin/articles/table/ArticlesTable";
-import ArticleModal from "@/components/admin/articles/modal/ArticleModal";
-import Pagination from "@/components/admin/articles/table/Pagination";
+import Modal from "@/components/modal";
+import Pagination from "@/components/Pagination";
 
 export default function AdminArticlesPage() {
     const [articles, setArticles] = useState<any[]>([]);
@@ -52,10 +52,14 @@ export default function AdminArticlesPage() {
 
             <Pagination page={page} setPage={setPage} />
 
-            <ArticleModal
-                article={selectedArticle}
-                onClose={() => setSelectedArticle(null)}
-            />
+            {selectedArticle && (
+                <Modal
+                    title={selectedArticle.title}
+                    content={selectedArticle.content}
+                    date={selectedArticle.createdAt}
+                    onClose={() => setSelectedArticle(null)}
+                />
+            )}
 
             </div>
         </div>
