@@ -3,24 +3,30 @@
 interface Activity {
     id: number;
     title: string;
-    description: string;
+    content: string;
 }
 
 interface Props {
     activity: Activity;
     onDelete: (id: number) => void;
+    onSelect: (activity: Activity) => void;
 }
 
-export default function ActivityRow({ activity, onDelete }: Props) {
+export default function ActivityRow({ activity, onDelete, onSelect }: Props) {
     return (
         <tr className="border-b hover:bg-gray-50 transition">
 
         <td className="py-4 px-3 font-medium">
-            {activity.title}
+            <button
+                onClick={() => onSelect(activity)}
+                className="text-left hover:underline"
+            >
+                {activity.title}
+            </button>
         </td>
 
         <td className="py-4 px-3 text-gray-600">
-            {activity.description}
+            {activity.content}
         </td>
 
         <td className="py-4 px-3 flex gap-4">

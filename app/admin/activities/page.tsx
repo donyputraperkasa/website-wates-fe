@@ -1,201 +1,77 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import api from "@/lib/api";
-
-interface Activity {
-    id: number;
-    title: string;
-    description: string;
-    date?: string;
-}
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import ActivitiesTable from "@/components/admin/activities/table/ActivitiesTable";
+import Modal from "@/components/modal";
+import Pagination from "@/components/Pagination";
 
 export default function AdminActivitiesPage() {
-    const [activities, setActivities] = useState<Activity[]>([]);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [image, setImage] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
-
-    const fetchActivities = async () => {
-        try {
-        const res = await api.get("/activities");
-        setActivities(res.data);
-        } catch (err) {
-        console.error("Failed to fetch activities", err);
-        }
-    };
-
-    const createActivity = async () => {
-        if (!title || !description) return;
-
-        setLoading(true);
-
-        try {
-            const formData = new FormData();
-            formData.append("title", title);
-            formData.append("description", description);
-
-            if (image) {
-                formData.append("image", image);
-            }
-
-            await api.post("/activities", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            setTitle("");
-            setDescription("");
-            setImage(null);
-            setPreview(null);
-
-            fetchActivities();
-        } catch (err) {
-            console.error("Failed to create activity", err);
-        }
-
-        setLoading(false);
-    };
-
-    const deleteActivity = async (id: number) => {
-        try {
-        await api.delete(`/activities/${id}`);
-        fetchActivities();
-        } catch (err) {
-        console.error("Failed to delete activity", err);
-        }
-    };
+    const [activities, setActivities] = useState<any[]>([]);
+    const [page, setPage] = useState(1);
+    const [selectedActivity, setSelectedActivity] = useState<any | null>(null);
 
     useEffect(() => {
-        fetchActivities();
-    }, []);
+        async function fetchArticles() {
+        const res = await fetch(`http://localhost:4000/activities?page=${page}`);
+        const data = await res.json();
+        setActivities(data);
+        }
+
+        fetchArticles();
+    }, [page]);
+
+    const handleDelete = async (id: number) => {
+        if (!confirm("Delete this activity?")) return;
+
+        await fetch(`http://localhost:4000/activities/${id}`, {
+            method: "DELETE",
+        });
+
+        setActivities((prev) => prev.filter((a) => a.id !== id));
+    };
 
     return (
-        <div className="relative min-h-screen py-16 px-6">
+        <div className="relative min-h-screen px-10 py-16">
 
-            {/* soft faded school background */}
-            <div
-                className="absolute inset-0 bg-cover bg-center blur-sm"
-                style={{ backgroundImage: "url('/gambar1.jpeg')" }}
-            ></div>
-            {/* white overlay to make it subtle */}
-            <div className="absolute inset-0 bg-white/80"></div>
+            {/* Background Image */}
+            <div className="fixed inset-0 bg-[url('/gambar1.jpeg')] bg-cover bg-center opacity-30 pointer-events-none" />
 
-            <div className="relative max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8">Admin Activities</h1>
+            <div className="max-w-5xl mx-auto space-y-10 bg-white/80 backdrop-blur border border-gray-200 rounded-2xl shadow-xl p-10">
 
-            {/* Create Activity */}
-            <div className="bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl shadow-xl p-10 mb-10">
-                <h2 className="text-xl font-semibold mb-4">Tambah Kegiatan</h2>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-800">Activities</h1>
+                    <p className="text-sm text-gray-500">Kelola aktivitass website sekolah</p>
+                </div>
 
-                <div className="flex flex-col gap-6">
-                    <label className="text-sm font-semibold text-gray-700">Title</label>
-                    <input
-                        type="text"
-                        placeholder="Judul kegiatan"
-                        className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-
-                    <label className="text-sm font-semibold text-gray-700">Content</label>
-                    <textarea
-                        placeholder="Isi kegiatan"
-                        className="w-full border border-gray-300 rounded-xl px-4 py-4 min-h-[140px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        rows={4}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-
-                    <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 flex flex-col gap-3 bg-gray-50/50">
-                        <label className="text-sm font-semibold text-gray-700">Activity Image</label>
-
-                        <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl cursor-pointer hover:bg-blue-700 transition shadow w-fit">
-                            Upload Image
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (!file) return;
-
-                                    setImage(file);
-                                    setPreview(URL.createObjectURL(file));
-                                }}
-                            />
-                        </label>
-                    </div>
-
-                    <div className="mt-2">
-                {preview && (
-                    <div className="w-56 h-36 relative rounded-xl overflow-hidden border">
-                        <Image
-                            src={preview}
-                            alt="preview"
-                            fill
-                            className="object-cover rounded"
-                        />
-                    </div>
-                )}
-                    </div>
-
-                <button
-                    onClick={createActivity}
-                    disabled={loading}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition inline-flex items-center gap-2 w-fit mt-6"
+                <Link
+                    href="/admin/activities/create"
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition"
                 >
-                    {loading ? "Saving..." : "Publish Activity"}
-                </button>
-                </div>
+                    <Plus size={18} />
+                    Create Activity
+                </Link>
             </div>
 
-            {/* Activities Table */}
-            <div className="bg-white/90 backdrop-blur border rounded-2xl shadow-lg p-8 mt-12">
-                <h2 className="text-xl font-semibold mb-4">Daftar Kegiatan</h2>
+            <ActivitiesTable
+                activities={activities}
+                onSelect={setSelectedActivity}
+                onDelete={handleDelete}
+            />
 
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead className="border-b">
-                            <tr>
-                                <th className="py-2">Judul</th>
-                                <th className="py-2">Deskripsi</th>
-                                <th className="py-2">Aksi</th>
-                            </tr>
-                        </thead>
+            <Pagination page={page} setPage={setPage} />
 
-                        <tbody>
-                        {activities.map((activity) => (
-                            <tr key={activity.id} className="border-b">
-                            <td className="py-3">{activity.title}</td>
-                            <td className="py-3">{activity.description}</td>
+            {selectedActivity && (
+                <Modal
+                    title={selectedActivity.title}
+                    content={selectedActivity.content}
+                    date={selectedActivity.createdAt}
+                    onClose={() => setSelectedActivity(null)}
+                />
+            )}
 
-                            <td className="py-3">
-                                <button
-                                onClick={() => deleteActivity(activity.id)}
-                                className="text-red-500 hover:underline"
-                                >
-                                Delete
-                                </button>
-                            </td>
-                            </tr>
-                        ))}
-
-                        {activities.length === 0 && (
-                            <tr>
-                            <td colSpan={3} className="py-6 text-center text-gray-500">
-                                Belum ada kegiatan
-                            </td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
             </div>
         </div>
     );

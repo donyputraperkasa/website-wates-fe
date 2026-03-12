@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Navbar() {
     return (
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50">
-            <nav className="flex items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl shadow-md px-8 py-4 border border-gray-200">
+        <div className="fixed top-0 left-0 w-full z-50 flex justify-center pt-4">
+            <nav className="w-[92%] max-w-7xl flex items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl shadow-md px-8 py-4 border border-gray-200">
                 
                 <h1 className="text-lg font-bold text-blue-900 tracking-wide">
                     SMP BOPKRI 1 WATES
