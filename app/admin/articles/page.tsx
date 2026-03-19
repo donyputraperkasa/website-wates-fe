@@ -23,34 +23,38 @@ export default function AdminArticlesPage() {
     }, [page]);
 
     return (
-        <div className="relative min-h-screen px-10 py-16">
+        <div className="relative min-h-screen px-6 py-20 bg-gradient-to-b from-gray-50 to-white">
 
-            {/* Background Image */}
-            <div className="fixed inset-0 bg-[url('/gambar1.jpeg')] bg-cover bg-center opacity-30 pointer-events-none" />
+            <div className="relative max-w-6xl mx-auto space-y-10 bg-white/90 backdrop-blur border border-gray-200 rounded-3xl shadow-xl p-10">
 
-            <div className="max-w-5xl mx-auto space-y-10 bg-white/80 backdrop-blur border border-gray-200 rounded-2xl shadow-xl p-10">
-
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Articles</h1>
-                    <p className="text-sm text-gray-500">Kelola artikel berita website sekolah.</p>
+                    <h1 className="text-4xl font-bold text-gray-800 tracking-tight">Articles</h1>
+                    <p className="text-sm text-gray-500">Kelola artikel website sekolah dengan tampilan modern.</p>
+                    <div className="mt-3 w-16 h-1 bg-blue-600 rounded-full" />
                 </div>
 
                 <Link
                     href="/admin/articles/create"
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition"
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95"
                 >
                     <Plus size={18} />
                     Create Article
                 </Link>
             </div>
 
-            <ArticlesTable
-                articles={articles}
-                onSelect={setSelectedArticle}
-            />
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
 
-            <Pagination page={page} setPage={setPage} />
+            <div className="space-y-8">
+                <ArticlesTable
+                    articles={articles}
+                    onSelect={setSelectedArticle}
+                />
+
+                <div className="flex justify-center pt-4">
+                    <Pagination page={page} setPage={setPage} />
+                </div>
+            </div>
 
             {selectedArticle && (
                 <Modal

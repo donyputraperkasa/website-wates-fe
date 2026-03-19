@@ -44,14 +44,14 @@ export default async function ActivityDetail({ params }: { params: Promise<{ id:
 
     if (!activity) {
         return (
-            <div className="pt-32 text-center text-gray-500">
+            <div className="pt-16 text-center text-gray-500">
                 Activity tidak ditemukan
             </div>
         )
     }
 
     return (
-        <div className="pt-32 pb-20 px-6">
+        <div className="pt-16 pb-20 px-6">
 
             {/* Back Button */}
             <div className="max-w-5xl mx-auto mb-6">

@@ -1,36 +1,13 @@
 import React from "react";
 import Link from "next/link";
-
-interface Activity {
-    id: number;
-    title: string;
-    description: string;
-    image?: string;
-    date?: string;
-}
-
-async function getActivities(): Promise<Activity[]> {
-    try {
-        const res = await fetch("http://localhost:4000/activities", {
-        cache: "no-store",
-        });
-
-        if (!res.ok) {
-        throw new Error("Failed to fetch activities");
-        }
-
-        return res.json();
-    } catch (error) {
-        console.error("Fetch activities error:", error);
-        return [];
-    }
-    }
+import { getActivities } from "@/services/activity.service";
+import { Activity } from "@/types";
 
     export default async function ActivitiesPage() {
-    const activities = await getActivities();
+    const activities: Activity[] = await getActivities();
 
     return (
-        <div className="max-w-6xl mx-auto px-6 pt-32 pb-20">
+        <div className="max-w-7xl mx-auto px-6 pt-16 pb-20">
 
             {/* Page Title */}
             <div className="mb-12">
@@ -47,46 +24,40 @@ async function getActivities(): Promise<Activity[]> {
             )}
 
             {/* Activities List */}
-            <div className="space-y-6">
-            {activities.map((activity) => (
-                <Link
-                key={activity.id}
-                href={`/activities/${activity.id}`}
-                className="group block bg-white rounded-xl border shadow-sm hover:shadow-md transition p-6"
-                >
-                <div className="flex gap-6">
+            <div className="space-y-8">
+                {activities.map((activity) => (
+                    <Link
+                    key={activity.id}
+                    href={`/activities/${activity.id}`}
+                    className="block group"
+                    >
+                    <div className="flex flex-col gap-1">
 
-                    {/* Image */}
-                    {activity.image && (
-                    <img
-                        src={`http://localhost:4000/uploads/${activity.image}`}
-                        alt={activity.title}
-                        className="w-44 h-32 object-cover rounded-lg"
-                    />
-                    )}
-
-                    {/* Text Content */}
-                    <div className="flex-1">
-
-                    <h2 className="text-xl font-semibold text-blue-600 group-hover:underline mb-1">
+                        {/* Title */}
+                        <h2 className="text-xl font-semibold text-blue-600 group-hover:underline">
                         {activity.title}
-                    </h2>
+                        </h2>
 
-                    {activity.date && (
-                        <p className="text-sm text-gray-400 mb-2">
-                        {new Date(activity.date).toLocaleDateString("id-ID")}
+                        {/* URL / Meta (optional feel like Google) */}
+                        <p className="text-sm text-green-600">
+                        /activities/{activity.id}
                         </p>
-                    )}
 
-                    <p className="text-gray-600 text-sm line-clamp-3">
+                        {/* Date */}
+                        {activity.date && (
+                        <p className="text-xs text-gray-400">
+                            {new Date(activity.date).toLocaleDateString("id-ID")}
+                        </p>
+                        )}
+
+                        {/* Description */}
+                        <p className="text-gray-600 text-sm leading-relaxed w-full line-clamp-3">
                         {activity.description}
-                    </p>
+                        </p>
 
                     </div>
-
-                </div>
-                </Link>
-            ))}
+                    </Link>
+                ))}
             </div>
 
         </div>

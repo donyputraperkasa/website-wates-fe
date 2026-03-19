@@ -18,48 +18,48 @@ interface Props {
 
 export default function ActivitiesTable({ activities, onDelete, onSelect }: Props) {
     return (
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white/90 backdrop-blur rounded-3xl p-6">
 
-        <h2 className="text-lg font-semibold mb-6">
-            Daftar Kegiatan
-        </h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-6 tracking-tight">
+                Daftar Kegiatan
+            </h2>
 
-        <div className="overflow-x-auto">
-            <table className="w-full text-left">
+            <div className="overflow-x-auto">
+                <table className="w-full text-left">
 
-            <thead className="border-b text-sm text-gray-600">
-                <tr>
-                <th className="py-3 px-3">Title</th>
-                <th className="py-3 px-3">Description</th>
-                <th className="py-3 px-3">Action</th>
-                </tr>
-            </thead>
+                <thead className="bg-gray-50 text-xs uppercase text-gray-500 tracking-wider">
+                    <tr>
+                    <th className="py-4 px-4">Title</th>
+                    <th className="py-4 px-4">Description</th>
+                    <th className="py-4 px-4">Action</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                {activities.map((activity) => (
-                <ActivityRow
-                    key={activity.id}
-                    activity={activity}
-                    onDelete={onDelete}
-                    onSelect={onSelect}
-                />
-                ))}
+                <tbody className="divide-y divide-gray-100">
+                    {activities.map((activity) => (
+                    <ActivityRow
+                        key={activity.id}
+                        activity={activity}
+                        onDelete={onDelete}
+                        onSelect={onSelect}
+                    />
+                    ))}
 
-                {activities.length === 0 && (
-                <tr>
-                    <td
-                    colSpan={3}
-                    className="py-8 text-center text-gray-500"
-                    >
-                    Belum ada kegiatan
-                    </td>
-                </tr>
-                )}
+                    {activities.length === 0 && (
+                    <tr>
+                        <td
+                        colSpan={3}
+                        className="py-12 text-center text-gray-400 text-sm"
+                        >
+                        Belum ada kegiatan 🚀
+                        </td>
+                    </tr>
+                    )}
 
-            </tbody>
+                </tbody>
 
-            </table>
-        </div>
+                </table>
+            </div>
 
         </div>
     );

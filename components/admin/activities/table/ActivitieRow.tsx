@@ -14,38 +14,43 @@ interface Props {
 
 export default function ActivityRow({ activity, onDelete, onSelect }: Props) {
     return (
-        <tr className="border-b hover:bg-gray-50 transition">
+        <tr className="border-b hover:bg-gray-50 transition-all">
 
-        <td className="py-4 px-3 font-medium">
+            {/* Title */}
+            <td className="py-5 px-4">
             <button
                 onClick={() => onSelect(activity)}
-                className="text-left hover:underline"
+                className="text-left font-semibold text-gray-800 hover:text-blue-600 transition"
             >
                 {activity.title}
             </button>
-        </td>
+            </td>
 
-        <td className="py-4 px-3 text-gray-600">
+            {/* Content */}
+            <td className="py-5 px-4 text-gray-500 text-sm line-clamp-2 max-w-md">
             {activity.content}
-        </td>
+            </td>
 
-        <td className="py-4 px-3 flex gap-4">
+            {/* Actions */}
+            <td className="py-5 px-4">
+            <div className="flex items-center gap-3">
 
-            <a
-            href={`/admin/activities/edit/${activity.id}`}
-            className="text-blue-600 hover:underline"
-            >
-            Edit
-            </a>
+                <a
+                href={`/admin/activities/edit/${activity.id}`}
+                className="px-3 py-1.5 text-sm bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"
+                >
+                Edit
+                </a>
 
-            <button
-            onClick={() => onDelete(activity.id)}
-            className="text-red-500 hover:underline"
-            >
-            Delete
-            </button>
+                <button
+                onClick={() => onDelete(activity.id)}
+                className="px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+                >
+                Delete
+                </button>
 
-        </td>
+            </div>
+            </td>
 
         </tr>
     );
