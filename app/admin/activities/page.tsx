@@ -6,6 +6,8 @@ import { Plus } from "lucide-react";
 import ActivitiesTable from "@/components/admin/activities/table/ActivitiesTable";
 import Modal from "@/components/modal";
 import Pagination from "@/components/Pagination";
+import { getActivities } from "@/services/activity.service";
+import api from "@/lib/api";
 
 export default function AdminActivitiesPage() {
     const [activities, setActivities] = useState<any[]>([]);
@@ -13,21 +15,22 @@ export default function AdminActivitiesPage() {
     const [selectedActivity, setSelectedActivity] = useState<any | null>(null);
 
     useEffect(() => {
-        async function fetchArticles() {
-        const res = await fetch(`http://localhost:4000/activities?page=${page}`);
-        const data = await res.json();
-        setActivities(data);
+        async function fetchActivities() {
+            try {
+                const data = await getActivities();
+                setActivities(data?.data ?? data);
+            } catch (error) {
+                console.error("Failed to fetch activities", error);
+            }
         }
 
-        fetchArticles();
+        fetchActivities();
     }, [page]);
 
     const handleDelete = async (id: number) => {
         if (!confirm("Delete this activity?")) return;
 
-        await fetch(`http://localhost:4000/activities/${id}`, {
-            method: "DELETE",
-        });
+        await api.delete(`/activities/${id}`);
 
         setActivities((prev) => prev.filter((a) => a.id !== id));
     };

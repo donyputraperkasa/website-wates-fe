@@ -15,7 +15,15 @@ export default async function ArticlesPage() {
     return (
         <div className="max-w-7xl mx-auto px-6 pt-16 pb-20">
 
-            <h1 className="text-3xl font-bold mb-8">Articles</h1>
+            {/* Page Title */}
+            <div className="mb-12">
+                <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                    Artikel Sekolah
+                </h1>
+                <p className="text-gray-500">
+                    Informasi kegiatan terbaru SMP BOPKRI 1 Wates
+                </p>
+            </div>
 
             {!articles && (
                 <p className="text-gray-500">Gagal memuat data artikel</p>

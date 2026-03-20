@@ -1,5 +1,7 @@
 import { getArticle, getArticles } from "@/services/article.service";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 interface Props {
     params: Promise<{
         id: string;
@@ -21,7 +23,7 @@ export default async function ArticleDetail({ params }: Props) {
             {article.image && (
                 <div className="w-full bg-gray-100 flex items-center justify-center max-h-[420px]">
                 <img
-                    src={`http://localhost:4000/uploads/articles/${article.image}`}
+                    src={`${API_URL}/uploads/articles/${article.image}`}
                     alt={article.title}
                     className="max-h-[420px] w-auto object-contain"
                 />
@@ -65,7 +67,7 @@ export default async function ArticleDetail({ params }: Props) {
 
                         {item.image && (
                         <img
-                            src={`http://localhost:4000/uploads/articles/${item.image}`}
+                            src={`${API_URL}/uploads/articles/${item.image}`}
                             className="w-full h-40 object-cover"
                         />
                         )}

@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import ArticlesTable from "@/components/admin/articles/table/ArticlesTable";
 import Modal from "@/components/modal";
 import Pagination from "@/components/Pagination";
+import { getArticles } from "@/services/article.service";
 
 export default function AdminArticlesPage() {
     const [articles, setArticles] = useState<any[]>([]);
@@ -14,9 +15,12 @@ export default function AdminArticlesPage() {
 
     useEffect(() => {
         async function fetchArticles() {
-        const res = await fetch(`http://localhost:4000/articles?page=${page}`);
-        const data = await res.json();
-        setArticles(data);
+            try {
+                const data = await getArticles();
+                setArticles(data?.data ?? data);
+            } catch (err) {
+                console.error(err);
+            }
         }
 
         fetchArticles();

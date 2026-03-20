@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getActivities } from "@/services/activity.service";
 import { Activity } from "@/types";
 
-    export default async function ActivitiesPage() {
+export default async function ActivitiesPage() {
     let activities: Activity[] = [];
 
     try {
@@ -19,7 +19,7 @@ import { Activity } from "@/types";
             {/* Page Title */}
             <div className="mb-12">
                 <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                    Kegiatan Sekolah
+                    Aktivitas Sekolah
                 </h1>
                 <p className="text-gray-500">
                     Informasi kegiatan terbaru SMP BOPKRI 1 Wates

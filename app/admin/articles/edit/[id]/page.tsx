@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import EditArticleHeader from "@/components/admin/articles/form/EditArticleHeader";
 import ImageUploadSection from "@/components/admin/ImageUploadSection";
 import ArticleFormActions from "@/components/admin/articles/form/ArticleFormActions";
+import api from "@/lib/api";
 
 export default function EditArticlePage() {
     const router = useRouter();
@@ -22,14 +23,14 @@ export default function EditArticlePage() {
     useEffect(() => {
         async function fetchArticle() {
         try {
-            const res = await fetch(`http://localhost:4000/articles/${id}`);
-            const data = await res.json();
+            const res = await api.get(`/articles/${id}`);
+            const data = res.data?.data ?? res.data;
 
             setTitle(data.title);
             setContent(data.content);
 
-            if (data.imageUrl) {
-            setCurrentImage(data.imageUrl);
+            if (data.image) {
+            setCurrentImage(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${data.image}`);
             }
         } catch (err) {
             console.error(err);
@@ -46,21 +47,13 @@ export default function EditArticlePage() {
         setLoading(true);
 
         try {
-        const token = localStorage.getItem("token");
-
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
 
         if (image) formData.append("image", image);
 
-        await fetch(`http://localhost:4000/articles/${id}`, {
-            method: "PATCH",
-            headers: {
-            Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        });
+        await api.patch(`/articles/${id}`, formData);
 
         router.push("/admin/articles");
         } catch (err) {

@@ -1,15 +1,10 @@
 import Link from "next/link"
+import { Activity } from "@/types/activity";
 
-interface Activity {
-    id: number
-    title: string
-    description: string
-    image?: string
-    date?: string
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function getActivity(id: string): Promise<Activity> {
-    const res = await fetch(`http://localhost:4000/activities/${id}`, {
+    const res = await fetch(`${API_URL}/activities/${id}`, {
         cache: "no-store"
     })
 
@@ -17,7 +12,7 @@ async function getActivity(id: string): Promise<Activity> {
         console.warn("Direct activity endpoint failed, trying fallback list endpoint")
 
         // fallback: fetch all activities then find the one with matching id
-        const listRes = await fetch("http://localhost:4000/activities", {
+        const listRes = await fetch(`${API_URL}/activities`, {
             cache: "no-store"
         })
 
@@ -67,7 +62,7 @@ export default async function ActivityDetail({ params }: { params: Promise<{ id:
             {activity.image && (
                 <div className="max-w-5xl mx-auto h-[420px] overflow-hidden rounded-xl shadow-lg">
                 <img
-                    src={`http://localhost:4000/uploads/${activity.image}`}
+                    src={`${API_URL}/uploads/${activity.image}`}
                     alt={activity.title}
                     className="w-full h-full object-cover"
                 />

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, ImagePlus } from "lucide-react";
 import Link from "next/link";
+import api from "@/lib/api";
 
 export default function CreateActivityPage() {
     const router = useRouter();
@@ -20,8 +21,6 @@ export default function CreateActivityPage() {
         setLoading(true);
 
         try {
-        const token = localStorage.getItem("token");
-
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", content);
@@ -30,13 +29,7 @@ export default function CreateActivityPage() {
             formData.append("image", image);
         }
 
-        await fetch("http://localhost:4000/activities", {
-            method: "POST",
-            headers: {
-            Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        });
+        await api.post("/activities", formData);
 
         router.push("/admin/activities");
         } catch (err) {
@@ -85,7 +78,7 @@ export default function CreateActivityPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full border border-gray-400 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Judul artikel"
+                placeholder="Judul aktivitas"
                 required
                 />
             </div>
@@ -97,7 +90,7 @@ export default function CreateActivityPage() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 className="w-full border border-gray-400 rounded-lg px-4 py-3 h-44 focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Isi artikel"
+                placeholder="Isi aktivitas"
                 required
                 />
             </div>

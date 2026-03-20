@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import EditActivityHeader from "@/components/admin/activities/form/EditActivityHeader";
 import ImageUploadSection from "@/components/admin/ImageUploadSection";
 import ActivityFormAction from "@/components/admin/activities/form/ActivityFormActions";
+import api from "@/lib/api";
 
 export default function EditActivityPage() {
     const router = useRouter();
@@ -22,8 +23,8 @@ export default function EditActivityPage() {
     useEffect(() => {
         async function fetchArticle() {
             try {
-                const res = await fetch(`http://localhost:4000/activities/${id}`);
-                const json = await res.json();
+                const res = await api.get(`/activities/${id}`);
+                const json = res.data;
 
                 // support both {data: {...}} and direct object
                 const data = json?.data ?? json;
@@ -33,7 +34,7 @@ export default function EditActivityPage() {
 
                 // backend usually returns "image" not "imageUrl"
                 if (data?.image) {
-                    setCurrentImage(`http://localhost:4000/activities/${data.image}`);
+                    setCurrentImage(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${data.image}`);
                 }
             } catch (err) {
                 console.error(err);
@@ -50,27 +51,19 @@ export default function EditActivityPage() {
         setLoading(true);
 
         try {
-        const token = localStorage.getItem("token");
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", content);
 
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", content);
+            if (image) formData.append("image", image);
 
-        if (image) formData.append("image", image);
+            await api.patch(`/activities/${id}`, formData);
 
-        await fetch(`http://localhost:4000/activities/${id}`, {
-            method: "PATCH",
-            headers: {
-            Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        });
-
-        router.push("/admin/activities");
+            router.push("/admin/activities");
         } catch (err) {
-        console.error(err);
+            console.error(err);
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 

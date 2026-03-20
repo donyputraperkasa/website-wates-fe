@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
                 disabled={loading}
                 className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
             >
-                {loading ? "Logging in..." : "Login"}
+                {loading ? "bentar baru otw masuk" : "Login"}
             </button>
             </form>
         </div>

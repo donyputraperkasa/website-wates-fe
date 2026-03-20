@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, ImagePlus } from "lucide-react";
 import Link from "next/link";
+import api from "@/lib/api";
 
 export default function CreateArticlePage() {
   const router = useRouter();
@@ -20,8 +21,6 @@ export default function CreateArticlePage() {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-
       const formData = new FormData();
       formData.append("title", title);
       formData.append("content", content);
@@ -30,13 +29,7 @@ export default function CreateArticlePage() {
         formData.append("image", image);
       }
 
-      await fetch("http://localhost:4000/articles", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      await api.post("/articles", formData);
 
       router.push("/admin/articles");
     } catch (err) {
