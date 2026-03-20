@@ -73,12 +73,66 @@ export default function PpdbPage() {
         <FilterBar filter={filter} setFilter={setFilter} />
     </div>
 
-    <PpdbTable
-        data={filteredData}
-        updateStatus={updateStatus}
-        badgeClass={badgeClass}
-        waLink={waLink}
-    />
+    <div className="bg-white rounded-xl shadow overflow-hidden hidden md:block">
+      <PpdbTable
+          data={filteredData}
+          updateStatus={updateStatus}
+          badgeClass={badgeClass}
+          waLink={waLink}
+      />
+    </div>
+
+    <div className="md:hidden space-y-4">
+      {filteredData.map((item: any) => (
+        <div key={item.id} className="bg-white p-4 rounded-xl shadow space-y-2">
+          <p><span className="font-semibold">Nama:</span> {item.nama}</p>
+          <p><span className="font-semibold">Email:</span> {item.email}</p>
+          <p><span className="font-semibold">Kontak:</span> {item.kontak}</p>
+          <p><span className="font-semibold">Asal:</span> {item.asalSekolah}</p>
+
+          <div className="flex items-center justify-between mt-2">
+            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${badgeClass(item.status)}`}>
+              {item.status || "PENDING"}
+            </span>
+
+            <a
+              href={waLink(item.kontak)}
+              target="_blank"
+              className="text-xs px-3 py-1 bg-green-600 text-white rounded"
+            >
+              Chat WA
+            </a>
+          </div>
+
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={() => updateStatus(item.id, "PENDING")}
+              className={`flex-1 py-1 rounded ${item.status === "PENDING" ? "bg-yellow-500 text-white" : "bg-gray-100"}`}
+            >
+              Pending
+            </button>
+
+            <button
+              onClick={() => updateStatus(item.id, "DITERIMA")}
+              className={`flex-1 py-1 rounded ${item.status === "DITERIMA" ? "bg-green-600 text-white" : "bg-gray-100"}`}
+            >
+              Terima
+            </button>
+
+            <button
+              onClick={() => updateStatus(item.id, "DITOLAK")}
+              className={`flex-1 py-1 rounded ${item.status === "DITOLAK" ? "bg-red-600 text-white" : "bg-gray-100"}`}
+            >
+              Tolak
+            </button>
+          </div>
+
+          <p className="text-xs text-gray-500">
+            {item.createdAt ? new Date(item.createdAt).toLocaleString() : "-"}
+          </p>
+        </div>
+      ))}
+    </div>
     </div>
     );
 }
