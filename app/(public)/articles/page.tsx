@@ -10,6 +10,10 @@ export default async function ArticlesPage() {
 
             <h1 className="text-3xl font-bold mb-8">Articles</h1>
 
+            {articles.length === 0 && (
+            <p className="text-gray-500">Belum ada artikel rilis kakaaaa</p>    
+            )}
+
             <div className="space-y-8">
             {articles.map((article: Article) => (
                 <Link

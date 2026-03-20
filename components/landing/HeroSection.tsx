@@ -14,12 +14,11 @@ export default function HeroSection() {
         {/* HERO CONTENT */}
         <div className="relative max-w-4xl px-6">
             <h1 className="text-5xl font-bold mb-6">
-            SMP BOPKRI 1 WATES
+                SMP BOPKRI 1 WATES
             </h1>
 
             <p className="text-lg leading-relaxed">
-            Sekolah yang mengembangkan siswa kritis, kreatif,
-            dan mampu melakukan penelitian sejak dini.
+                SMP BOPKRI 1 Wates merupakan sekolah berbasis riset pertama yang ada di Kabupaten Kulon Progo. SMP BOPKRI 1 Wates memiliki tujuan antara lain memberikan pelayanan pendidikan yang profesional berdasarkan kasih; menciptakan lingkungan sekolah yang mendukung proses pembelajaran berbasis riset; menciptakan pembelajaran mandiri dan kontekstual berbasis riset yang menarik, menyenangkan dan berkarakter sesuai minat dan potensi; menghasilkan lulusan yang memiliki life skill dan soft skill yang bermanfaat bagi kehidupan; serta menghasilkan lulusan yang siap berkarya dan berkontribusi bagi masyarakat.
             </p>
         </div>
 

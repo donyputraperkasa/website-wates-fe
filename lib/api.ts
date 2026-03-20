@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:4000",
+    // baseURL: "http://localhost:4000", ini saat di local
+    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
 });
 
 // attach JWT token automatically

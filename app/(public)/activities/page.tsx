@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import React from "react";
 import Link from "next/link";
 import { getActivities } from "@/services/activity.service";
@@ -15,12 +16,12 @@ import { Activity } from "@/types";
                 Kegiatan Sekolah
             </h1>
             <p className="text-gray-500">
-                Informasi kegiatan terbaru SMP BOPKRI 1 Wates.
+                Informasi kegiatan terbaru SMP BOPKRI 1 Wates
             </p>
             </div>
 
             {activities.length === 0 && (
-            <p className="text-gray-500">Belum ada kegiatan.</p>
+            <p className="text-gray-500">Belum ada kegiatan kakaaa</p>
             )}
 
             {/* Activities List */}
