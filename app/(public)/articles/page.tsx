@@ -1,14 +1,25 @@
+export const dynamic = "force-dynamic";
 import { getArticles } from "@/services/article.service";
 import Link from "next/link";
 import { Article } from "@/types";
 
 export default async function ArticlesPage() {
-    const articles: Article[] = await getArticles();
+    let articles: Article[] = [];
+
+    try {
+        articles = await getArticles();
+    } catch (error) {
+        console.error("Failed to fetch articles:", error);
+    }
 
     return (
         <div className="max-w-7xl mx-auto px-6 pt-16 pb-20">
 
             <h1 className="text-3xl font-bold mb-8">Articles</h1>
+
+            {!articles && (
+                <p className="text-gray-500">Gagal memuat data artikel</p>
+            )}
 
             {articles.length === 0 && (
             <p className="text-gray-500">Belum ada artikel rilis kakaaaa</p>    
