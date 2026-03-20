@@ -5,23 +5,31 @@ import { getActivities } from "@/services/activity.service";
 import { Activity } from "@/types";
 
     export default async function ActivitiesPage() {
-    const activities: Activity[] = await getActivities();
+    let activities: Activity[] = [];
+
+    try {
+        activities = await getActivities();
+    } catch (error) {
+        console.error("Failed to fetch activities:", error);
+    }
 
     return (
         <div className="max-w-7xl mx-auto px-6 pt-16 pb-20">
 
             {/* Page Title */}
             <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                Kegiatan Sekolah
-            </h1>
-            <p className="text-gray-500">
-                Informasi kegiatan terbaru SMP BOPKRI 1 Wates
-            </p>
+                <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                    Kegiatan Sekolah
+                </h1>
+                <p className="text-gray-500">
+                    Informasi kegiatan terbaru SMP BOPKRI 1 Wates
+                </p>
             </div>
 
             {activities.length === 0 && (
-            <p className="text-gray-500">Belum ada kegiatan kakaaa</p>
+            <p className="text-gray-500">
+                Belum ada kegiatan / gagal memuat data
+            </p>
             )}
 
             {/* Activities List */}
