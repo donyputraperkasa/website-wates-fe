@@ -15,8 +15,13 @@ export default function PpdbPage() {
             })
         : [];
 
+    // Safety check for API URL
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+        console.error("NEXT_PUBLIC_API_URL belum diset");
+    }
+
     async function fetchData() {
-        const res = await fetch("http://localhost:4000/ppdb/public");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ppdb/public`);
         const json = await res.json();
 
         if (Array.isArray(json)) {
@@ -33,12 +38,12 @@ export default function PpdbPage() {
     }, []);
 
     async function updateStatus(id: number, status: string) {
-        await fetch(`http://localhost:4000/ppdb/${id}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status }),
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ppdb/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status }),
         });
 
         fetchData();

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
     LayoutDashboard,
     FileText,
@@ -10,6 +11,8 @@ import {
     LogOut,
     School,
     ExternalLink,
+    Menu,
+    X,
 } from "lucide-react";
 
 const menuItems = [
@@ -37,9 +40,23 @@ const menuItems = [
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <aside className="w-64 min-h-screen bg-gray-900 text-white flex flex-col relative z-20">
+        <>
+        {/* Mobile Toggle Button */}
+        <button
+            className="lg:hidden fixed top-4 left-4 z-50 bg-white text-gray-800 p-2 rounded-md shadow-md"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+        >
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+
+        <aside
+            className={`fixed lg:static top-0 left-0 h-full w-64 bg-gray-900 text-white flex flex-col z-40 transform transition-transform duration-300
+    ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+        >
             {/* Logo */}
             <div className="flex items-center gap-3 px-6 py-6 border-b border-gray-800">
                 <School size={28} className="text-blue-400" />
@@ -53,29 +70,31 @@ export default function Sidebar() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 mb-4 rounded-lg border border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white transition"
+                    onClick={() => setIsOpen(false)}
                 >
                     <ExternalLink size={20} />
                     <span className="text-sm font-medium">View Website</span>
                 </Link>
                 {menuItems.map((item) => {
-                const Icon = item.icon;
-                const active = pathname === item.href;
+                    const Icon = item.icon;
+                    const active = pathname === item.href;
 
-                return (
-                    <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition
+                    return (
+                        <Link
+                            key={item.name}
+                            href={item.href}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition
                         ${
-                        active
-                            ? "bg-blue-600 text-white"
-                            : "text-gray-300 hover:bg-blue-600 hover:text-white"
+                            active
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-300 hover:bg-blue-600 hover:text-white"
                         }`}
-                    >
-                    <Icon size={20} />
-                    <span className="text-sm font-medium">{item.name}</span>
-                    </Link>
-                );
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <Icon size={20} />
+                            <span className="text-sm font-medium">{item.name}</span>
+                        </Link>
+                    );
                 })}
 
             </nav>
@@ -83,16 +102,18 @@ export default function Sidebar() {
             {/* Logout */}
             <div className="p-4 border-t border-gray-800">
                 <button
-                className="bg-blue-300 flex items-center gap-3 w-full px-4 py-3 rounded-lg text-gray-900 font-bold hover:bg-red-600 hover:text-white transition"
-                onClick={() => {
-                    localStorage.removeItem("token");
-                    window.location.href = "/admin-login";
-                }}
+                    className="bg-blue-300 flex items-center gap-3 w-full px-4 py-3 rounded-lg text-gray-900 font-bold hover:bg-red-600 hover:text-white transition"
+                    onClick={() => {
+                        setIsOpen(false);
+                        localStorage.removeItem("token");
+                        window.location.href = "/admin-login";
+                    }}
                 >
-                <LogOut size={20} />
-                <span className="text-sm font-bold">Logout</span>
+                    <LogOut size={20} />
+                    <span className="text-sm font-bold">Logout</span>
                 </button>
             </div>
         </aside>
+        </>
     );
 }
