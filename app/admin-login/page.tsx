@@ -18,7 +18,10 @@ export default function AdminLoginPage() {
         setError(null);
 
         try {
-        const res = await fetch("http://localhost:4000/auth/login", {
+        if (!process.env.NEXT_PUBLIC_API_URL) {
+            throw new Error("API URL tidak ditemukan. Pastikan NEXT_PUBLIC_API_URL sudah di set.");
+        }
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
