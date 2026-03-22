@@ -21,29 +21,25 @@ export default function EditActivityPage() {
     const [loadingData, setLoadingData] = useState(true);
 
     useEffect(() => {
-        async function fetchArticle() {
-            try {
-                const res = await api.get(`/activities/${id}`);
-                const json = res.data;
+        async function fetchActivity() {
+        try {
+            const res = await api.get(`/activities/${id}`);
+            const data = res.data?.data ?? res.data;
 
-                // support both {data: {...}} and direct object
-                const data = json?.data ?? json;
+            setTitle(data.title);
+            setContent(data.description ?? data.content ?? "");
 
-                setTitle(data?.title ?? "");
-                setContent(data?.description ?? data?.content ?? "");
-
-                // backend usually returns "image" not "imageUrl"
-                if (data?.image) {
-                    setCurrentImage(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${data.image}`);
-                }
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoadingData(false);
+            if (data.image) {
+            setCurrentImage(`${process.env.NEXT_PUBLIC_API_URL}/uploads/activities/${data.image}`);
             }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoadingData(false);
+        }
         }
 
-        if (id) fetchArticle();
+        if (id) fetchActivity();
     }, [id]);
 
     async function handleSubmit(e: React.FormEvent) {
@@ -55,7 +51,10 @@ export default function EditActivityPage() {
             formData.append("title", title);
             formData.append("description", content);
 
-            if (image) formData.append("image", image);
+            // only send image if user uploads new one
+            if (image) {
+                formData.append("image", image);
+            }
 
             await api.patch(`/activities/${id}`, formData);
 
@@ -68,7 +67,7 @@ export default function EditActivityPage() {
     }
 
     if (loadingData) {
-        return <div className="px-8 py-10">Loading article...</div>;
+        return <div className="px-8 py-10">Loading activity...</div>;
     }
 
     return (
@@ -89,25 +88,25 @@ export default function EditActivityPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Masukkan judul artikel"
+                placeholder="Masukkan judul aktivitas"
                 required
             />
             </div>
 
             {/* Content */}
             <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">Content</label>
-            <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 h-44 focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Isi artikel..."
-                required
-            />
+                <label className="text-sm font-semibold text-gray-700">Description</label>
+                <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-3 h-44 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Isi aktivitas..."
+                    required
+                />
             </div>
 
             <ImageUploadSection
-                label="Article Image"
+                label="Activity Image"
                 preview={preview}
                 currentImage={currentImage}
                 setImage={setImage}

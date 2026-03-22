@@ -2,13 +2,20 @@ import api from "@/lib/api";
 
 export const getArticles = async () => {
     const res = await api.get("/articles");
-    return res.data;
+    return res.data?.data ?? res.data;
 };
 
 export const getArticle = async (id: string) => {
-    const res = await api.get(`/articles/${id}`);
-    const json = res.data;
-    return json?.data ?? json;
+    try {
+        const res = await api.get(`/articles/${id}`);
+        const json = res.data;
+        return json?.data ?? json;
+    } catch (error) {
+        // fallback: ambil dari list
+        const res = await api.get("/articles");
+        const articles = res.data?.data ?? res.data;
+        return articles.find((a: any) => String(a.id) === String(id));
+    }
 };
 
 export const createArticle = async (formData: FormData) => {

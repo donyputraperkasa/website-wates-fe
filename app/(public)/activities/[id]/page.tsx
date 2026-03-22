@@ -1,52 +1,31 @@
-import Link from "next/link"
-import { Activity } from "@/types/activity";
+import Link from "next/link";
+import { getActivity, getActivities } from "@/services/activity.service";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-async function getActivity(id: string): Promise<Activity> {
-    const res = await fetch(`${API_URL}/activities/${id}`, {
-        cache: "no-store"
-    })
-
-    if (!res.ok) {
-        console.warn("Direct activity endpoint failed, trying fallback list endpoint")
-
-        // fallback: fetch all activities then find the one with matching id
-        const listRes = await fetch(`${API_URL}/activities`, {
-            cache: "no-store"
-        })
-
-        if (!listRes.ok) {
-            console.error("Failed to fetch activity list", listRes.status)
-            return null as any
-        }
-
-        const listJson = await listRes.json()
-        const activities = listJson?.data ?? listJson
-
-        return activities?.find((a: any) => String(a.id) === String(id)) ?? null
-    }
-
-    const json = await res.json()
-
-    // Support both { data: activity } and direct activity object
-    return json?.data ?? json
+type Props = { 
+    params: Promise<{
+        id: string;
+    }> 
 }
 
-export default async function ActivityDetail({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params
-    const activity = await getActivity(id)
-
+export default async function ActivityDetail({ params }: Props) {
+    const { id } = await params;
+    const activity = await getActivity(id);
     if (!activity) {
         return (
             <div className="pt-16 text-center text-gray-500">
-                Activity tidak ditemukan
+                Aktivitas tidak ditemukan
             </div>
-        )
+        );
     }
+    const activities = (await getActivities()) ?? [];
+    const otherActivities = activities
+        .filter((a: any) => a.id !== activity?.id)
+        .slice(0, 3);
 
     return (
-        <div className="pt-16 pb-20 px-6">
+        <div className="min-h-screen pt-16 pb-16 px-6 bg-gray-50">
 
             {/* Back Button */}
             <div className="max-w-5xl mx-auto mb-6">
@@ -58,43 +37,74 @@ export default async function ActivityDetail({ params }: { params: Promise<{ id:
                 </Link>
             </div>
 
-            {/* Hero Image */}
+            <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
+
+            {/* Image */}
             {activity.image && (
-                <div className="max-w-5xl mx-auto h-[420px] overflow-hidden rounded-xl shadow-lg">
+                <div className="w-full bg-gray-100 flex items-center justify-center max-h-[420px]">
                 <img
                     src={`${API_URL}/uploads/${activity.image}`}
                     alt={activity.title}
-                    className="w-full h-full object-cover"
+                    className="max-h-[420px] w-auto object-contain"
                 />
                 </div>
             )}
 
-            {/* Content */}
-            <div className="max-w-3xl mx-auto mt-10">
+            <div className="p-8 md:p-10 space-y-6">
 
                 {/* Title */}
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight break-words">
                 {activity.title}
                 </h1>
 
-                {/* Date */}
-                {activity.date && (
-                <p className="text-sm text-gray-500 mb-8">
-                    {new Date(activity.date).toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    })}
-                </p>
-                )}
+                {/* Divider */}
+                <div className="w-20 h-1 bg-blue-600 rounded" />
 
-                {/* Article Content */}
-                <div className="text-gray-700 leading-relaxed text-lg space-y-6">
-                <p>{activity.description}</p>
+                {/* Content */}
+                <div className="text-gray-700 text-lg leading-relaxed whitespace-pre-line break-words">
+                {activity.content ?? activity.description}
                 </div>
 
             </div>
 
+            </div>
+
+            {/* Other Activities */}
+            <div className="max-w-5xl mx-auto mt-16">
+
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+                Aktivitas Lainnya
+            </h2>
+
+            <div className="grid md:grid-cols-3 gap-6">
+
+                {otherActivities.map((item: any) => (
+                <Link
+                    key={item.id}
+                    href={`/activities/${item.id}`}
+                    className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+                >
+
+                    {item.image && (
+                    <img
+                        src={`${API_URL}/uploads/${item.image}`}
+                        className="w-full h-40 object-cover"
+                    />
+                    )}
+
+                    <div className="p-4">
+                    <h3 className="font-semibold text-gray-800 line-clamp-2">
+                        {item.title}
+                    </h3>
+                    </div>
+
+                </Link>
+                ))}
+
+            </div>
+
+            </div>
+
         </div>
-    )
+    );
 }

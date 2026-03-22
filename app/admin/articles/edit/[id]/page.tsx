@@ -92,14 +92,14 @@ export default function EditArticlePage() {
 
             {/* Content */}
             <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">Content</label>
-            <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 h-44 focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Isi artikel..."
-                required
-            />
+                <label className="text-sm font-semibold text-gray-700">Content</label>
+                <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-3 h-44 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Isi artikel..."
+                    required
+                />
             </div>
 
             <ImageUploadSection
