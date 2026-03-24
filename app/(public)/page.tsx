@@ -3,6 +3,7 @@ import AboutSection from "@/components/landing/AboutSection";
 import CoreValue from "@/components/landing/CoreValue";
 import ProgramSection from "@/components/landing/ProgramSection";
 import CTASection from "@/components/landing/CTASection";
+import { Analytics } from "@vercel/analytics/next";
 
 
 export default function Home() {
@@ -14,6 +15,8 @@ export default function Home() {
         <CoreValue />
         <ProgramSection />
         <CTASection />
+
+        <Analytics />
 
         </div>
     );
