@@ -19,11 +19,11 @@ export default function PpdbTable({ data, updateStatus, badgeClass, waLink }: an
                 <tbody>
                 {data.map((item: any) => (
                     <PpdbRow
-                    key={item.id}
-                    item={item}
-                    updateStatus={updateStatus}
-                    badgeClass={badgeClass}
-                    waLink={waLink}
+                        key={item.id}
+                        item={item}
+                        updateStatus={updateStatus}
+                        badgeClass={badgeClass}
+                        waLink={waLink}
                     />
                 ))}
                 </tbody>

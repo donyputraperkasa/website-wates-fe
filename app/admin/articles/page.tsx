@@ -7,6 +7,7 @@ import ArticlesTable from "@/components/admin/articles/table/ArticlesTable";
 import Modal from "@/components/modal";
 import Pagination from "@/components/Pagination";
 import { getArticles } from "@/services/article.service";
+import api from "@/lib/api";
 
 export default function AdminArticlesPage() {
     const [articles, setArticles] = useState<any[]>([]);
@@ -25,6 +26,17 @@ export default function AdminArticlesPage() {
 
         fetchArticles();
     }, [page]);
+
+    const handleDelete = async (id: number) => {
+        try {
+            await api.delete(`/articles/${id}`);
+
+            setArticles(prev => prev.filter(a => a.id !== id));
+            console.log("Deleted:", id);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     return (
         <div className="relative min-h-screen px-6 py-20 bg-gradient-to-b from-gray-50 to-white">
@@ -53,6 +65,7 @@ export default function AdminArticlesPage() {
                 <ArticlesTable
                     articles={articles}
                     onSelect={setSelectedArticle}
+                    onDelete={handleDelete}
                 />
 
                 <div className="flex justify-center pt-4">

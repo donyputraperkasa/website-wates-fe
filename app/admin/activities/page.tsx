@@ -28,11 +28,14 @@ export default function AdminActivitiesPage() {
     }, [page]);
 
     const handleDelete = async (id: number) => {
-        if (!confirm("Delete this activity?")) return;
+        try {
+            await api.delete(`/activities/${id}`);
 
-        await api.delete(`/activities/${id}`);
-
-        setActivities((prev) => prev.filter((a) => a.id !== id));
+            setActivities(prev => prev.filter(a => a.id !== id));
+            console.log("Deleted:", id);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (

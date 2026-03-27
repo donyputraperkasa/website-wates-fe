@@ -38,7 +38,18 @@ export default function ArticleRow({ article, onSelect, onDelete }: any) {
             </Link>
 
             <button
-              onClick={() => onDelete && onDelete(article.id)}
+              onClick={() => {
+                console.log("Delete clicked:", article.id);
+                if (!onDelete) {
+                  console.warn("onDelete is not provided");
+                  return;
+                }
+
+                const confirmDelete = confirm("Yakin ingin menghapus artikel ini?");
+                if (!confirmDelete) return;
+
+                onDelete(article.id);
+              }}
               className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
             >
               <Trash2 size={14} />
